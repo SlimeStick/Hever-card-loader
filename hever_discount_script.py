@@ -12,7 +12,8 @@ HEVER_MAXIMUM_DAILY_LOAD_COUNT = 5
 
 def press_image(image_path: str, confidence: float):
     image_location = pyautogui.locateOnScreen(image_path, confidence=confidence)
-    image_x, image_y = pyautogui.center(image_location)
+    left, top, width, height = image_location
+    image_x, image_y = pyautogui.center((left, top, width, height))
     pyautogui.click(image_x, image_y)
 
 
@@ -132,7 +133,7 @@ class LoadOption:
     load_value: int
 
 
-def calculate_ideal_load_option(current_discount: float):
+def calculate_ideal_load_option(current_discount: float) -> LoadOption:
     load_options = [
         LoadOption(
             discount=1 - hvr_floor_function((1 - current_discount) * load_value) / load_value,
