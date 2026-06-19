@@ -4,14 +4,13 @@ from time import sleep
 
 import pyautogui
 
-DEFAULT_IMAGE_SEARCH_CONFIDENCE = 0.9
 CRITICAL_IMAGE_SEARCH_CONFIDENCE = 0.99
 HEVER_MINIMUM_LOAD_VALUE: int = 5  # Sadly the loading system only accepts integers larger than 5
 HEVER_MAXIMUM_LOAD_VALUE: int = 1000
 HEVER_MAXIMUM_DAILY_LOAD_COUNT = 5
 
 
-def press_image(image_path: str, confidence: float = DEFAULT_IMAGE_SEARCH_CONFIDENCE):
+def press_image(image_path: str, confidence: float):
     image_location = pyautogui.locateOnScreen(image_path, confidence=confidence)
     image_x, image_y = pyautogui.center(image_location)
     pyautogui.click(image_x, image_y)
@@ -41,10 +40,24 @@ def load_once(amount: int, card_number: str, year: str, month: str, cvv: str):
     pyautogui.press('tab')
     pyautogui.press('space')
 
-    enter_field("card_number.png", card_number, True)
-    enter_field("card_year.png", year, False)
-    enter_field("card_month.png", month, False)
-    enter_field("card_cvv.png", cvv, True)
+    # skip reading the EULA
+    pyautogui.press('tab')
+
+    # get to card number field
+    pyautogui.press('tab')
+    pyautogui.typewrite(card_number)
+
+    # get to card year field
+    pyautogui.press('tab')
+    pyautogui.typewrite(year)
+
+    # get to card month field
+    pyautogui.press('tab')
+    pyautogui.typewrite(month)
+
+    # get to card cvv field
+    pyautogui.press('tab')
+    pyautogui.typewrite(cvv)
 
     # go off the fields so that the card can be checked
     pyautogui.press('tab')
