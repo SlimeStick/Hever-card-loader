@@ -181,7 +181,7 @@ def main():
     print(f"Going to load the {args.card_type} card with value {load_option.load_value} "
           f"for {args.load_count} times with a discount of {load_option.discount}")
 
-    for i in range(args.load_count):
+    for _ in range(args.load_count):
         open_browser()
 
         log_into_hever()
