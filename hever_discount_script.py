@@ -5,7 +5,7 @@ from time import sleep
 import pyautogui
 
 CRITICAL_IMAGE_SEARCH_CONFIDENCE = 0.99
-HEVER_MINIMUM_LOAD_VALUE: int = 5  # Sadly the loading system only accepts integers larger than 5
+HEVER_MINIMUM_LOAD_VALUE: int = 5  # Sadly, the loading system only accepts integers larger than 5
 HEVER_MAXIMUM_LOAD_VALUE: int = 1000
 HEVER_MAXIMUM_DAILY_LOAD_COUNT = 5
 
@@ -66,7 +66,7 @@ def load_once(card_type: str, amount: int, card_number: str, year: str, month: s
     pyautogui.press('tab')
     pyautogui.press('space')
 
-    # wait for confirmation popup to show up
+    # wait for the confirmation popup to show up
     sleep(3)
 
     # confirm
@@ -115,7 +115,7 @@ def open_browser():
     pyautogui.press('win')
     pyautogui.typewrite('brave')
     pyautogui.press('enter')
-    # wait for app to open
+    # wait for the app to open
     sleep(3)
     pyautogui.press('tab')
     pyautogui.press('space')
