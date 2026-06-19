@@ -16,15 +16,6 @@ def press_image(image_path: str, confidence: float):
     pyautogui.click(image_x, image_y)
 
 
-def enter_field(field_image_path: str, text: str, remove_previous_data: bool):
-    press_image(field_image_path)
-
-    if remove_previous_data:
-        pyautogui.hotkey('ctrl', 'a')
-
-    pyautogui.typewrite(text)
-
-
 def load_once(amount: int, card_number: str, year: str, month: str, cvv: str):
     # go to the checkout site
     pyautogui.hotkey('ctrl', 'l')
@@ -34,7 +25,12 @@ def load_once(amount: int, card_number: str, year: str, month: str, cvv: str):
     # wait for page to load
     sleep(5)
 
-    enter_field("amount_to_load.png", str(amount), True)
+    # press an image about the amount to load
+    press_image("above_amount_to_load.png", CRITICAL_IMAGE_SEARCH_CONFIDENCE)
+
+    # get to amount to load
+    pyautogui.press('tab')
+    pyautogui.typewrite(str(amount))
 
     # accept the EULA
     pyautogui.press('tab')
@@ -71,7 +67,12 @@ def load_once(amount: int, card_number: str, year: str, month: str, cvv: str):
 
     # wait for confirmation popup to show up
     sleep(3)
-    press_image("final_accept_button.png", confidence=CRITICAL_IMAGE_SEARCH_CONFIDENCE)
+
+    # confirm
+    pyautogui.press('tab')
+    pyautogui.press('tab')
+    pyautogui.press('tab')
+    pyautogui.press('enter')
 
 
 def log_into_hever():
