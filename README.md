@@ -44,6 +44,7 @@ python hever_discount_script.py \
 
 ⚠️ According to Hever's EULA, performing more than **5 loads** may result in your card being frozen for 24 hours.
 
+⚠️ The Hever site may update and break this script
 
 ## How It Works
 
