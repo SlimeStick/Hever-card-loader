@@ -1,10 +1,63 @@
-Hever card loader is a project to automate utilizing the loading mechanism specified in Hever's EULA in order to get higher discount percentages when loading your Hever card.
+# Hever Card Loader
 
-Using it during regular months should increase your discount by up to 5% (if before you were loading at 28% and now you load at 33%)
+A Python utility that automates loading your Hever card multiple times in order to maximize the discount percentage available through Hever's loading system.
 
-In order to run the script you should install python3 the pyautogui package.
+## Why?
 
-Running the script:
-python hever_discount_script.py --load-count 4 --card-type food --current-discount-percentage 0.3 --card-number 5555555555554444 --year 2030 --month 03 --cvv 737
+Hever offers higher discount percentages when smaller amounts are loaded. Instead of manually performing multiple loads, this script automates the process.
 
-Note that you should not load your cards more than 5 times as Hever's EULA says your card will get frozen for 24 hours if you do so.
+Using it during regular months may increase your discount by up to **5% additional discount** (if before you were loading at 28% and now you load at 33%)
+
+## Features
+
+- Supports both Hever card types
+- Calculates optimal load amounts based on your current load percentage
+- Reduces repetitive manual form filling
+
+## Requirements
+
+- Python 3
+- `pyautogui`
+
+Install dependencies:
+
+```bash
+pip install pyautogui
+```
+
+## Usage
+
+```bash
+python hever_discount_script.py \
+    --load-count 4 \
+    --card-type food \
+    --current-discount-percentage 0.3 \
+    --card-number 5555555555554444 \
+    --year 2030 \
+    --month 03 \
+    --cvv 737
+```
+
+## Warning
+
+⚠️ According to Hever's EULA, performing more than **5 loads** may result in your card being frozen for 24 hours.
+
+
+## How It Works
+
+The script uses image recognition and mouse & keyboard control to:
+
+1. Open the browser
+2. Log on to Hever
+3. Locate relevant fields and buttons
+4. Fill in payment information
+5. Submit repeated loads automatically
+
+## License
+
+This project is licensed under the **GPL-3.0 License**.
+
+See the [LICENSE](LICENSE) file for details.
+
+---
+
