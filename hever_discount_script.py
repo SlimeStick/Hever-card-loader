@@ -16,17 +16,17 @@ def press_image(image_path: str, confidence: float):
     pyautogui.click(image_x, image_y)
 
 
-def load_once(amount: int, card_number: str, year: str, month: str, cvv: str):
+def load_once(card_type: str, amount: int, card_number: str, year: str, month: str, cvv: str):
     # go to the checkout site
     pyautogui.hotkey('ctrl', 'l')
-    pyautogui.typewrite("https://www.hvr.co.il/orders/gift_2000.aspx")
+    pyautogui.typewrite(card_type_to_site_address(card_type))
     pyautogui.press("enter")
 
     # wait for page to load
     sleep(5)
 
     # press an image about the amount to load
-    press_image("above_amount_to_load.png", CRITICAL_IMAGE_SEARCH_CONFIDENCE)
+    press_image(card_type_to_image_above_amount_to_load(card_type), CRITICAL_IMAGE_SEARCH_CONFIDENCE)
 
     # get to amount to load
     pyautogui.press('tab')
@@ -75,10 +75,30 @@ def load_once(amount: int, card_number: str, year: str, month: str, cvv: str):
     pyautogui.press('enter')
 
 
+def card_type_to_site_address(card_type: str) -> str:
+    if card_type == 'food':
+        return "https://www.hvr.co.il/orders/gift_2000.aspx?food=1"
+    elif card_type == 'standing':
+        return "https://www.hvr.co.il/orders/gift_2000.aspx"
+    else:
+        raise RuntimeError(f"Unknown card type: {card_type}")
+
+
+def card_type_to_image_above_amount_to_load(card_type: str) -> str:
+    if card_type == 'food':
+        return "food_site_above_amount_to_load.png"
+    elif card_type == 'standing':
+        return "standing_site_above_amount_to_load.png"
+    else:
+        raise RuntimeError(f"Unknown card type: {card_type}")
+
+
 def log_into_hever():
     # go to the hever site
     pyautogui.hotkey('ctrl', 'l')
     pyautogui.typewrite("https://www.hvr.co.il/")
+    # disable auto-complete to not enter a wrong site
+    pyautogui.press("backspace")
     pyautogui.press("enter")
     # wait for autofill
     sleep(3)
@@ -127,13 +147,21 @@ def calculate_ideal_load_option(current_discount: float):
 def build_parser():
     parser = argparse.ArgumentParser(description="Auto-fill HVR payment forms using image recognition to automate"
                                                  "manual repeated low amount inputs to get "
-                                                 "a higher discount percentage")
+                                                 "a higher discount percentage."
+                                                 "WARNING from EULA: If you load your card more than 5 times in a day, "
+                                                 "it will be frozen for 24 hours.")
     parser.add_argument("--load-count", required=True, type=int,
                         help=f"The amount of times to load. Choosing {HEVER_MAXIMUM_DAILY_LOAD_COUNT} makes it so you"
                              f"cannot use the card today anymore.")
     parser.add_argument("--current-discount-percentage", required=True, type=float,
                         help="Your current hever discount percentage. Varies with the amount already spent on the "
                              "card, during holidays and birthday months.")
+    parser.add_argument(
+        "--card-type",
+        required=True,
+        choices=["food", "standing"],
+        help="Type of card to load, either the food AKA Teamim card or the standing AKA Keva card"
+    )
     parser.add_argument("--card-number", required=True, type=str, help="Card number")
     parser.add_argument("--year", required=True, type=str, help="Card expiration year")
     parser.add_argument("--month", required=True, type=str, help="Card expiration month")
@@ -145,7 +173,7 @@ def main():
     args = build_parser().parse_args()
 
     load_option = calculate_ideal_load_option(float(args.current_discount_percentage))
-    print(f"Going to load the value {load_option.load_value} "
+    print(f"Going to load the {args.card_type} card with value {load_option.load_value} "
           f"for {args.load_count} times with a discount of {load_option.discount}")
 
     for i in range(args.load_count):
@@ -153,7 +181,7 @@ def main():
 
         log_into_hever()
 
-        load_once(load_option.load_value, args.card_number, args.year, args.month, args.cvv)
+        load_once(args.card_type, load_option.load_value, args.card_number, args.year, args.month, args.cvv)
         # Wait to not spam the website
         sleep(60)
 
