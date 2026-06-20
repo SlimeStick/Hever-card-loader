@@ -1,4 +1,4 @@
-# Hever Card Loader
+# Better Hever Discounts
 
 A Python utility that automates loading your Hever card multiple times in order to maximize the discount percentage available through Hever's loading system.
 
